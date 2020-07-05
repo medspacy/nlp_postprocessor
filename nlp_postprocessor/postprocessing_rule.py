@@ -50,10 +50,23 @@ class PostprocessingRule:
         if debug:
             print("Passed:", self, "on ent:", ent, ent.sent)
         if self.action_args is None:
-            self.action(ent, i)
+            try:
+                self.action(ent, i)
+            except TypeError:
+                _raise_action_error(self.action, (ent, i))
         else:
-            self.action(ent, i, *self.action_args)
+            try:
+                self.action(ent, i, *self.action_args)
+            except TypeError:
+                _raise_action_error(self.action, (ent, i, *self.action_args))
         return True
 
     def __repr__(self):
         return f"PostprocessingRule: {self.name} - {self.description}"
+
+def _raise_action_error(func, args):
+    raise ValueError("The action function {0} does not have the correct number of arguments. "
+                     "Any action function must start with two arguments: (ent, i) - the span and the index of "
+                     "the span in doc.ents. Any additional arguments must be provided in a tuple "
+                     "in `rule.action_args`. "
+                     "Actual arguments passed in: {1} ".format(func, args))

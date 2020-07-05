@@ -82,6 +82,13 @@ def is_followed_by(ent, target, window=1):
     return False
 
 def span_contains(span, target, regex=True):
+    """Return True if a Span object contains a target phrase.
+    Case insensitive.
+    span: A spaCy Span, such as an entity in doc.ents
+    target: A target phrase or iterable of phrases to check in span.lower_.
+    regex (bool): Whether to search the span using a regular expression rather than
+        a literal string. Default True.
+    """
     if regex is True:
         import re
         func = lambda x: re.search(x, span.lower_, re.IGNORECASE) is not None
@@ -93,9 +100,6 @@ def span_contains(span, target, regex=True):
 
     # If it's an iterable, check if any of the strings are in sent
     for string in target:
-        # print(string)
-        # print(func(string))
-        # print()
         if func(string):
             return True
     return False
@@ -129,7 +133,7 @@ def remove_ent(ent, i):
 
 def set_label(ent, i, label):
     """Create a copy of the entity with a new label.
-    WARNING: This is not safe, as spaCy does not allow modifying the label
+    WARNING: This is not fully safe, as spaCy does not allow modifying the label
     of a span. Instead this creates a new copy and attempts to copy existing
     attributes, but this is not totally reliable.
     """
@@ -148,7 +152,21 @@ def set_label(ent, i, label):
             pass
 
 def set_negated(ent, i, value=True):
+    "Set the value of ent._.is_negated to value."
     ent._.is_negated = value
 
+def set_uncertain(ent, i, value=True):
+    "Set the value of ent._.is_uncertain to value."
+    ent._.is_uncertain = value
 
+def set_historical(ent, i, value=True):
+    "Set the value of ent._.is_historical to value."
+    ent._.is_historical = value
 
+def set_hypothetical(ent, i, value=True):
+    "Set the value of ent._.is_hypothetical to value."
+    ent._.is_hypothetical = value
+
+def set_family(ent, i, value=True):
+    "Set the value of ent._.is_family to value."
+    ent._.is_hypothetical = value

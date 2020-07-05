@@ -1,7 +1,7 @@
 class PostprocessingPattern:
 
     def __init__(self, condition, success_value=True, condition_args=None):
-        """A Pattern defines a single condition to check against an entity.
+        """A PostprocessingPattern defines a single condition to check against an entity.
         condition (function): A function to call on an entity. If the result of
             the function call equals success_value, then the pattern passes.
         success_value: The value which should be returned by condition(ent)
